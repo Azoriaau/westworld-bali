@@ -1,0 +1,72 @@
+---
+import { nav, site } from '../site.config';
+---
+
+<header
+  transition:persist="site-header"
+  class="fixed inset-x-0 top-0 z-50 border-b border-sand/70 bg-linen/88 backdrop-blur-md supports-[backdrop-filter]:bg-linen/75"
+  data-site-header
+>
+  <div class="container-site flex h-18 items-center justify-between gap-6 md:h-20">
+    <a href="/" class="group flex flex-col leading-none">
+      <span class="font-serif text-2xl tracking-wide md:text-[1.7rem]">{site.name}</span>
+      <span class="mt-1 text-[0.625rem] font-semibold tracking-[0.3em] text-driftwood-dark uppercase">
+        by {site.developer}
+      </span>
+    </a>
+
+    <nav aria-label="Main" class="hidden items-center gap-9 lg:flex">
+      <ul class="flex items-center gap-9 text-[0.8125rem] font-medium tracking-[0.14em] uppercase">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="link-underline py-1" data-nav-link>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/contact/" class="btn btn-primary !min-h-11 !px-6" data-nav-link>Enquire</a>
+    </nav>
+
+    <button
+      type="button"
+      class="-mr-2 inline-flex size-12 items-center justify-center rounded-soft lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+    >
+      <span class="sr-only">Open menu</span>
+      <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M3 7h18M3 12h18M3 17h18" data-icon-open></path>
+        <path d="M6 6l12 12M18 6L6 18" data-icon-close hidden></path>
+      </svg>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-menu"
+    aria-label="Mobile"
+    class="grid grid-rows-[0fr] border-t border-transparent transition-[grid-template-rows,border-color] duration-500 ease-soft data-[open]:grid-rows-[1fr] data-[open]:border-sand lg:hidden"
+    data-mobile-menu
+    inert
+  >
+    <div class="overflow-hidden">
+      <ul class="container-site flex flex-col py-4 font-serif text-3xl">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="block py-3" data-nav-link>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="pt-4 pb-4">
+          <a href="/contact/" class="btn btn-primary w-full" data-nav-link>Enquire</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

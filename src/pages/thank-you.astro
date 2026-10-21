@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { whatsappLink } from '../lib/format';
+---
+
+<BaseLayout title="Thank you" description="Thank you for your enquiry." noindex>
+  <section class="flex min-h-[80svh] items-center pt-32 pb-24">
+    <div class="container-site max-w-2xl text-center">
+      <p class="eyebrow rise">Enquiry received</p>
+      <h1 class="rise mt-4 text-5xl md:text-7xl">Thank you</h1>
+      <p class="rise rise-2 mt-6 text-lg text-driftwood-dark">
+        We've received your enquiry and will be in touch within one business day. If it's urgent, message us on WhatsApp.
+      </p>
+      <div class="rise rise-3 mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/villas/" class="btn btn-primary">Back to the villas</a>
+        <a href={whatsappLink()} target="_blank" rel="noopener" class="btn btn-outline">WhatsApp us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

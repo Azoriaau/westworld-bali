@@ -1,0 +1,244 @@
+@import 'tailwindcss';
+
+/* ── Theme tokens ─────────────────────────────────────────────
+   Use as bg-sand, text-ocean, border-driftwood, font-serif, etc. */
+@theme {
+  --color-sand: #e8dcc8;
+  --color-linen: #faf7f2; /* warm off-white */
+  --color-seafoam: #a8c5bd;
+  --color-ocean: #2f4f4f; /* deep ocean */
+  --color-driftwood: #8b7b6b;
+
+  /* Supporting shades (derived from the palette) */
+  --color-sand-light: #f2ebdf;
+  --color-seafoam-light: #dce8e4;
+  --color-ocean-dark: #223b3b;
+  --color-driftwood-dark: #6b5d4f; /* driftwood tone that passes AA contrast for body text */
+
+  --font-serif: var(--font-cormorant), Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-karla), system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+
+  --radius-soft: 0.375rem;
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+@layer base {
+  html {
+    background-color: var(--color-linen);
+    color: var(--color-ocean);
+    scroll-padding-top: 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-seafoam);
+    color: var(--color-ocean-dark);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ocean);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* ── Components ─────────────────────────────────────────────── */
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-driftwood-dark);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-soft);
+    border: 1px solid transparent;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s var(--ease-soft),
+      color 0.3s var(--ease-soft),
+      border-color 0.3s var(--ease-soft);
+  }
+  .btn-primary {
+    background: var(--color-ocean);
+    color: var(--color-linen);
+  }
+  .btn-primary:hover {
+    background: var(--color-ocean-dark);
+  }
+  .btn-outline {
+    border-color: currentColor;
+    color: var(--color-ocean);
+  }
+  .btn-outline:hover {
+    background: var(--color-ocean);
+    border-color: var(--color-ocean);
+    color: var(--color-linen);
+  }
+  .btn-light {
+    background: var(--color-linen);
+    color: var(--color-ocean);
+  }
+  .btn-light:hover {
+    background: var(--color-sand);
+  }
+
+  .link-underline {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.35s var(--ease-soft);
+  }
+  .link-underline:hover,
+  .link-underline[aria-current='page'] {
+    background-size: 100% 1px;
+  }
+
+  /* Form fields */
+  .field-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-driftwood-dark);
+  }
+  .field {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-driftwood) 55%, transparent);
+    border-radius: var(--radius-soft);
+    background: #fff;
+    color: var(--color-ocean);
+    font-size: 1rem;
+    transition:
+      border-color 0.25s var(--ease-soft),
+      box-shadow 0.25s var(--ease-soft);
+  }
+  .field::placeholder {
+    color: color-mix(in srgb, var(--color-driftwood-dark) 75%, transparent);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ocean);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-seafoam) 60%, transparent);
+  }
+  .field-select {
+    appearance: none;
+    padding-right: 3rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232F4F4F' stroke-width='1.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+  }
+  .field:user-invalid {
+    border-color: #a14b3b;
+  }
+
+  /* Rich text from villa Markdown */
+  .prose-villa p {
+    margin-bottom: 1.25em;
+  }
+  .prose-villa p:first-child {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    line-height: 1.45;
+  }
+}
+
+/* ── Motion ─────────────────────────────────────────────────────
+   1. Arrival: .rise elements fade and drift up when a page is shown.
+      Stagger with .rise-2 / .rise-3 (headings → text → images).
+   2. Scroll: [data-reveal] elements below the fold fade in when scrolled into view
+      (hidden state is only applied by JS, so content never disappears without it). */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.7s var(--ease-soft) 0.12s both;
+  }
+  .rise-2 {
+    animation-delay: 0.22s;
+  }
+  .rise-3 {
+    animation-delay: 0.34s;
+  }
+
+  [data-reveal].is-pending {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.9s var(--ease-soft),
+      transform 0.9s var(--ease-soft);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+}
+
+/* Page crossfade — the timing for the root view transition lives in src/lib/transitions.ts.
+   Shared-element morphs (villa card → villa hero) get the same gentle timing: */
+::view-transition-group(*) {
+  animation-duration: 0.45s;
+  animation-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

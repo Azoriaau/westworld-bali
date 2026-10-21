@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { softFade } from '../lib/transitions';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, imageAlt, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" transition:animation={softFade}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FAF7F2" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Font cssVariable="--font-cormorant" preload={[{ weight: '500', style: 'normal' }]} />
+    <Font cssVariable="--font-karla" preload={[{ weight: '400', style: 'normal' }]} />
+    <Seo title={title} description={description} image={image} imageAlt={imageAlt} noindex={noindex} />
+    <ClientRouter />
+  </head>
+  <body class="flex min-h-svh flex-col bg-linen text-ocean">
+    <a
+      href="#main"
+      class="sr-only z-[60] rounded-soft bg-ocean px-4 py-2 text-linen focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >Skip to content</a
+    >
+    <Header />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppButton />
+
+    <script>
+      import '../scripts/nav';
+      import '../scripts/reveal';
+      import '../scripts/lightbox';
+      import '../scripts/forms';
+    </script>
+  </body>
+</html>

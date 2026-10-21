@@ -1,0 +1,76 @@
+---
+import { nav, site } from '../site.config';
+import { whatsappLink } from '../lib/format';
+
+const socials = Object.entries(site.social).filter(([, url]) => url) as [string, string][];
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-auto bg-ocean text-linen">
+  <div class="container-site grid gap-12 py-16 md:grid-cols-12 md:py-20">
+    <div class="md:col-span-5">
+      <p class="font-serif text-3xl">{site.name}</p>
+      <p class="mt-2 text-xs font-semibold tracking-[0.3em] text-seafoam uppercase">by {site.developer}</p>
+      <p class="mt-6 max-w-sm text-linen/80">{site.tagline}</p>
+    </div>
+
+    <nav aria-label="Footer" class="md:col-span-3">
+      <p class="text-xs font-semibold tracking-[0.22em] text-seafoam uppercase">Explore</p>
+      <ul class="mt-5 space-y-2.5">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="link-underline text-linen/90 hover:text-linen">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li><a href="/contact/" class="link-underline text-linen/90 hover:text-linen">Enquire</a></li>
+      </ul>
+    </nav>
+
+    <div class="md:col-span-4">
+      <p class="text-xs font-semibold tracking-[0.22em] text-seafoam uppercase">Visit & contact</p>
+      <address class="mt-5 space-y-1 text-linen/90 not-italic">
+        {site.contact.address.map((line) => <span class="block">{line}</span>)}
+      </address>
+      <ul class="mt-5 space-y-2.5">
+        <li>
+          <a href={`mailto:${site.contact.email}`} class="link-underline text-linen/90 hover:text-linen"
+            >{site.contact.email}</a
+          >
+        </li>
+        <li>
+          <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="link-underline text-linen/90 hover:text-linen"
+            >{site.contact.phone}</a
+          >
+        </li>
+        <li>
+          <a href={whatsappLink()} target="_blank" rel="noopener" class="link-underline text-linen/90 hover:text-linen"
+            >WhatsApp</a
+          >
+        </li>
+      </ul>
+      {
+        socials.length > 0 && (
+          <ul class="mt-6 flex gap-5 text-sm tracking-[0.14em] uppercase">
+            {socials.map(([name, url]) => (
+              <li>
+                <a href={url} target="_blank" rel="noopener" class="link-underline capitalize text-linen/90 hover:text-linen">
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+  <div class="border-t border-linen/15">
+    <div class="container-site flex flex-col gap-2 py-6 pr-20 text-xs text-linen/70 md:flex-row md:justify-between">
+      <p>© {year} {site.developer}. All rights reserved.</p>
+      <p>Images and floor plans are indicative only. Prices subject to change.</p>
+    </div>
+  </div>
+</footer>

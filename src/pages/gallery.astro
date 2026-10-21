@@ -1,0 +1,66 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Lightbox from '../components/Lightbox.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getVillas } from '../lib/format';
+
+// Every image in src/assets/images/gallery/ is shown automatically (sorted by file name).
+// Add captions below by file name; images without one get a generic caption.
+const captions: Record<string, string> = {
+  'project-01.jpg': 'Interior living pavilion',
+  'project-02.jpg': 'Pool deck in the afternoon',
+  'project-03.jpg': 'Tropical garden walk',
+  'project-04.jpg': 'Sunset from the rooftop',
+  'project-05.jpg': 'Beachfront at Petitenget',
+};
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/images/gallery/*.{jpg,jpeg,png,webp,avif}', { eager: true });
+const projectImages = Object.entries(files)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, mod]) => {
+    const name = path.split('/').pop()!;
+    return { src: mod.default, alt: captions[name] ?? 'Westworld Seminyak project photograph' };
+  });
+
+// Villa galleries are included too, so new villa photos appear here without extra work.
+const villas = await getVillas();
+const villaImages = villas.flatMap((v) => v.data.gallery.map((g) => ({ src: g.src, alt: `${v.data.name}: ${g.alt}` })));
+
+const images = await Promise.all(
+  [...projectImages, ...villaImages].map(async (img) => ({
+    ...img,
+    large: (await getImage({ src: img.src, width: 1800, format: 'webp' })).src,
+  })),
+);
+---
+
+<BaseLayout title="Gallery" description="Photography of the villas, gardens and surroundings at Westworld Seminyak, Bali." image={projectImages[0]?.src}>
+  <PageIntro eyebrow="Gallery" title="Light, texture and the tropics" lead="A closer look at the villas, the materials and the Seminyak coastline." />
+
+  <section class="py-16 md:py-24">
+    <ul class="container-site columns-1 gap-4 sm:columns-2 lg:columns-3 [&>li]:mb-4">
+      {
+        images.map((img, i) => (
+          <li class:list={['break-inside-avoid', i < 3 ? 'rise rise-3' : '']} data-reveal={i >= 3 ? '' : undefined}>
+            <a href={img.large} data-lightbox="gallery" data-caption={img.alt} data-astro-reload class="group block overflow-hidden rounded-soft bg-sand">
+              <Image
+                src={img.src}
+                alt={img.alt}
+                widths={[400, 640, 900]}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                loading={i < 3 ? 'eager' : 'lazy'}
+                class="w-full transition-transform duration-700 ease-soft group-hover:scale-[1.03]"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <CtaBand />
+  <Lightbox />
+</BaseLayout>

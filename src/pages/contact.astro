@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { site } from '../site.config';
+import { whatsappLink } from '../lib/format';
+---
+
+<BaseLayout
+  title="Enquire"
+  description={`Enquire about the villas at ${site.name}, Seminyak. Request pricing, floor plans and rental projections, or book a private viewing.`}
+>
+  <PageIntro
+    eyebrow="Contact & enquiries"
+    title="Let's start a conversation"
+    lead="Request the information pack, pricing and availability, or arrange a private viewing in person or by video call."
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="container-site grid gap-16 lg:grid-cols-12 lg:gap-20">
+      <div class="rise rise-3 lg:col-span-8">
+        <EnquiryForm />
+      </div>
+
+      <aside class="rise rise-3 space-y-10 lg:col-span-4" aria-label="Contact details">
+        <div class="rounded-soft bg-sand-light p-8">
+          <h2 class="text-3xl">Prefer to chat?</h2>
+          <p class="mt-3 text-driftwood-dark">Message our sales team on WhatsApp. We usually reply within the hour.</p>
+          <a href={whatsappLink()} target="_blank" rel="noopener" class="btn btn-primary mt-6 w-full">WhatsApp us</a>
+        </div>
+        <dl class="space-y-6">
+          <div>
+            <dt class="eyebrow">Email</dt>
+            <dd class="mt-2"><a href={`mailto:${site.contact.email}`} class="link-underline text-lg">{site.contact.email}</a></dd>
+          </div>
+          <div>
+            <dt class="eyebrow">Phone</dt>
+            <dd class="mt-2"><a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="link-underline text-lg">{site.contact.phone}</a></dd>
+          </div>
+          <div>
+            <dt class="eyebrow">Sales gallery</dt>
+            <dd class="mt-2">
+              <address class="text-lg not-italic">{site.contact.address.map((line) => <span class="block">{line}</span>)}</address>
+            </dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

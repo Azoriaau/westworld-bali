@@ -1,0 +1,36 @@
+---
+// A lightweight "click to load" map: shows a static preview until the visitor asks for the
+// interactive Google Map, which keeps third-party scripts off the page for Lighthouse.
+import { Image } from 'astro:assets';
+import preview from '../assets/images/location/map-preview.jpg';
+import { site } from '../site.config';
+
+const query = encodeURIComponent(site.location.mapQuery);
+const src = `https://www.google.com/maps?q=${query}&z=14&output=embed`;
+const link = `https://www.google.com/maps/search/?api=1&query=${query}`;
+---
+
+<div class="relative aspect-[4/3] overflow-hidden rounded-soft bg-seafoam-light md:aspect-[16/9]" data-map data-src={src}>
+  <Image src={preview} alt="" widths={[640, 960, 1400]} sizes="(min-width: 1280px) 1200px, 100vw" class="absolute inset-0 size-full object-cover" />
+  <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-linen/30 p-6 text-center">
+    <button type="button" class="btn btn-primary" data-map-load>Load interactive map</button>
+    <a href={link} target="_blank" rel="noopener" class="link-underline bg-linen/80 px-2 text-sm">Open in Google Maps</a>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-map]').forEach((wrap) => {
+      wrap.querySelector('[data-map-load]')?.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = wrap.dataset.src!;
+        iframe.title = 'Map showing the location of the development';
+        iframe.className = 'absolute inset-0 size-full border-0';
+        iframe.referrerPolicy = 'no-referrer-when-downgrade';
+        iframe.allowFullscreen = true;
+        wrap.replaceChildren(iframe);
+        iframe.focus();
+      });
+    });
+  });
+</script>

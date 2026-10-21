@@ -1,0 +1,120 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import MapEmbed from '../components/MapEmbed.astro';
+import CtaBand from '../components/CtaBand.astro';
+import beach from '../assets/images/location/seminyak-beach.jpg';
+import cafes from '../assets/images/location/cafes.jpg';
+import rice from '../assets/images/location/rice-fields.jpg';
+
+// Approximate travel times — edit to suit the final site address.
+const distances = [
+  { place: 'Petitenget Beach', time: '5 min walk' },
+  { place: 'Seminyak Village & boutiques', time: '5 min drive' },
+  { place: 'Canggu', time: '20 min drive' },
+  { place: 'Ngurah Rai International Airport (DPS)', time: '30 min drive' },
+  { place: 'Uluwatu', time: '50 min drive' },
+  { place: 'Ubud', time: '75 min drive' },
+];
+
+const groups = [
+  {
+    title: 'Beaches',
+    image: beach,
+    alt: 'Golden sunset over Seminyak beach',
+    items: ['Petitenget Beach: wide sand and famous sunsets', 'Double Six Beach: surf lessons and beanbag bars', 'Batu Belig: quieter, local and laid-back'],
+  },
+  {
+    title: 'Cafés & dining',
+    image: cafes,
+    alt: 'Relaxed café interior with timber and linen tones',
+    items: ['Specialty coffee and brunch on Jalan Kayu Aya', 'Award-winning restaurants along Petitenget', 'Beach clubs for long afternoons by the sea'],
+  },
+  {
+    title: 'Everyday life',
+    image: rice,
+    alt: 'Green rice fields and a traditional villa roof',
+    items: ['International schools within 20 minutes', 'Supermarkets, gyms and yoga studios nearby', 'Private hospital and clinics in Kerobokan'],
+  },
+];
+---
+
+<BaseLayout
+  title="Location — Seminyak"
+  description="Discover Seminyak, Bali: beaches, cafés, dining and travel times from the villas, including the distance to Ngurah Rai International Airport."
+  image={beach}
+>
+  <PageIntro
+    eyebrow="Location"
+    title="Seminyak, where the rice fields meet the sea"
+    lead="Bali's most sought-after coastal village: long sunsets, great food and a relaxed, cosmopolitan feel, only thirty minutes from the international airport."
+    image={beach}
+    imageAlt="Sunset over the Seminyak coastline"
+  />
+
+  <section class="py-24 md:py-32">
+    <div class="container-site grid gap-14 lg:grid-cols-12 lg:gap-20">
+      <div class="lg:col-span-6" data-reveal>
+        <p class="eyebrow">The neighbourhood</p>
+        <h2 class="mt-4 text-4xl md:text-5xl">Close to everything, removed from the noise</h2>
+        <div class="mt-6 space-y-5 text-lg text-driftwood-dark">
+          <p>
+            The villas sit on a quiet residential lane just off Jalan Petitenget, a short barefoot walk from the beach.
+            Mornings start with coffee and a swim; evenings end with the sun sliding into the Indian Ocean.
+          </p>
+          <p>
+            Seminyak has long been Bali's strongest villa rental market, drawing travellers year-round for its dining,
+            design stores and beach clubs, while neighbouring Canggu and Kerobokan add surf, schools and everyday conveniences.
+          </p>
+        </div>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8" data-reveal style="--reveal-delay: .12s">
+        <h2 class="text-3xl">Travel times</h2>
+        <dl class="mt-6 divide-y divide-sand border-y border-sand">
+          {
+            distances.map((d) => (
+              <div class="flex justify-between gap-6 py-4">
+                <dt>{d.place}</dt>
+                <dd class="shrink-0 font-medium text-driftwood-dark">{d.time}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="mt-3 text-sm text-driftwood-dark">Times are approximate and depend on traffic.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-sand-light py-24 md:py-32">
+    <div class="container-site grid gap-12 md:grid-cols-3 md:gap-8">
+      {
+        groups.map((g, i) => (
+          <article data-reveal style={`--reveal-delay: ${i * 0.12}s`}>
+            <Image src={g.image} alt={g.alt} widths={[400, 640, 900]} sizes="(min-width: 768px) 33vw, 100vw" class="aspect-[4/3] w-full rounded-soft object-cover" />
+            <h2 class="mt-6 text-3xl">{g.title}</h2>
+            <ul class="mt-4 space-y-2 text-driftwood-dark">
+              {g.items.map((item) => (
+                <li class="flex gap-3">
+                  <span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-seafoam" aria-hidden="true" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="py-24 md:py-32" aria-labelledby="map-heading">
+    <div class="container-site">
+      <h2 id="map-heading" class="text-4xl md:text-5xl" data-reveal>On the map</h2>
+      <div class="mt-10" data-reveal>
+        <MapEmbed />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Visit Seminyak with us" />
+</BaseLayout>

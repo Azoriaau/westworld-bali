@@ -1,0 +1,27 @@
+---
+import { whatsappLink } from '../lib/format';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Come and see it for yourself',
+  text = 'Private viewings are available daily, in person or by video call. Tell us what you are looking for and we will be in touch within a day.',
+} = Astro.props;
+---
+
+<section class="bg-sand" data-reveal>
+  <div class="container-site flex flex-col items-start gap-8 py-20 md:flex-row md:items-end md:justify-between md:py-28">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Enquire</p>
+      <h2 class="mt-4 text-4xl md:text-6xl">{title}</h2>
+      <p class="mt-5 text-lg text-driftwood-dark">{text}</p>
+    </div>
+    <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+      <a href="/contact/" class="btn btn-primary">Enquire now</a>
+      <a href={whatsappLink()} target="_blank" rel="noopener" class="btn btn-outline">WhatsApp us</a>
+    </div>
+  </div>
+</section>

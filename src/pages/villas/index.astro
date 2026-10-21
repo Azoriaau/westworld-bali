@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import VillaCard from '../../components/VillaCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getVillas } from '../../lib/format';
+import { site } from '../../site.config';
+
+const villas = await getVillas();
+---
+
+<BaseLayout
+  title="The Villas"
+  description={`Browse ${villas.length} luxury villas in ${site.location.area}, Bali — bedrooms, land size, availability and pricing for each residence.`}
+  image={villas[0]?.data.heroImage}
+>
+  <PageIntro
+    eyebrow="The villas"
+    title="Find your place in Seminyak"
+    lead="Every residence is individually designed with its own pool, garden and outdoor living. Choose the one that fits the way you want to live, or invest."
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="container-site grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        villas.map((villa, i) => (
+          <div class:list={['rise', i === 1 && 'rise-2', i >= 2 && 'rise-3']}>
+            <VillaCard villa={villa} eager={i < 3} headingLevel="h2" />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBand title="Not sure which villa suits you?" text="We are happy to talk through layouts, rental returns and ownership structures. Send us a note or message us on WhatsApp." />
+</BaseLayout>

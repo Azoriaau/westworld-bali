@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../site.config';
+import development from '../assets/images/about/development.jpg';
+import portrait from '../assets/images/about/frank-portrait.jpg';
+import materials from '../assets/images/about/materials.jpg';
+
+const principles = [
+  {
+    title: 'Fewer, better homes',
+    text: 'A small number of villas means more land, more privacy and more care in every detail.',
+  },
+  {
+    title: 'Honest materials',
+    text: 'Recycled ironwood, local stone, terrazzo and linen: chosen to weather beautifully in the tropics.',
+  },
+  {
+    title: 'Built to be lived in',
+    text: 'Practical layouts, proper storage and staff areas make each villa as easy to own as it is to enjoy.',
+  },
+  {
+    title: 'Transparent ownership',
+    text: 'Clear leasehold terms, independent legal review and a straightforward path to purchase.',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description={`${site.developer} and Frank's vision for ${site.name}: a small collection of thoughtfully designed luxury villas in Seminyak, Bali.`}
+  image={development}
+>
+  <PageIntro
+    eyebrow={`About ${site.developer}`}
+    title="A quieter kind of luxury"
+    lead={`${site.developer} creates a small number of exceptional homes in places we love. ${site.name} is our first collection in Bali.`}
+    image={development}
+    imageAlt="The development set within a mature tropical garden"
+  />
+
+  <!-- Frank's vision -->
+  <section class="py-24 md:py-36">
+    <div class="container-site grid items-center gap-14 md:grid-cols-12 md:gap-16">
+      <div class="md:col-span-5" data-reveal>
+        <Image src={portrait} alt="Portrait of Frank, founder of Westworld Nominees" widths={[400, 640, 900]} sizes="(min-width: 768px) 40vw, 100vw" class="aspect-[4/5] w-full rounded-soft object-cover" />
+      </div>
+      <div class="md:col-span-7 lg:col-span-6 lg:col-start-7" data-reveal style="--reveal-delay: .12s">
+        <p class="eyebrow">Frank's vision</p>
+        <blockquote class="mt-6">
+          <p class="font-serif text-3xl leading-snug md:text-4xl">
+            "I wanted to build the kind of place I would want to come home to: calm, generous and connected to the
+            outdoors. Somewhere you feel the sea breeze the moment you walk through the gate."
+          </p>
+          <footer class="mt-6 text-sm tracking-[0.16em] text-driftwood-dark uppercase">Frank, Founder, {site.developer}</footer>
+        </blockquote>
+        <div class="mt-10 space-y-5 text-lg text-driftwood-dark">
+          <p>
+            After years of visiting Bali, Frank saw the same thing again and again: villas built quickly, for the
+            photograph rather than for living. {site.name} is the answer, a handful of homes designed around light,
+            airflow and privacy, with the quality and paperwork overseas buyers need to feel confident.
+          </p>
+          <p>
+            Every villa has been planned with local architects and craftspeople, using materials sourced as close to
+            the site as possible, and is backed by a professional management team for owners who choose to rent.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section class="bg-ocean py-24 text-linen md:py-32">
+    <div class="container-site">
+      <div class="max-w-2xl" data-reveal>
+        <p class="text-xs font-semibold tracking-[0.22em] text-seafoam uppercase">How we build</p>
+        <h2 class="mt-4 text-4xl md:text-6xl">Four principles behind every villa</h2>
+      </div>
+      <ol class="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          principles.map((p, i) => (
+            <li class="border-t border-linen/20 pt-6" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+              <span class="font-serif text-2xl text-seafoam">0{i + 1}</span>
+              <h3 class="mt-3 text-3xl">{p.title}</h3>
+              <p class="mt-3 text-linen/85">{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section aria-label="Materials" data-reveal>
+    <Image src={materials} alt="Close-up of timber, stone and linen finishes" widths={[640, 960, 1400]} sizes="100vw" class="h-[55svh] w-full object-cover md:h-[70svh]" />
+  </section>
+
+  <CtaBand title="Let's talk about your villa" />
+</BaseLayout>

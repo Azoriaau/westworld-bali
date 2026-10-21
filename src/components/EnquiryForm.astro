@@ -1,0 +1,78 @@
+---
+import { getVillas } from '../lib/format';
+
+interface Props {
+  /** Pre-select this villa (by name) */
+  villaName?: string;
+  heading?: string;
+  compact?: boolean;
+}
+
+const { villaName, heading, compact = false } = Astro.props;
+const villas = await getVillas();
+// Unique ids so the form can appear more than once on a page
+const uid = Math.random().toString(36).slice(2, 7);
+const id = (name: string) => `${name}-${uid}`;
+---
+
+<form
+  name="enquiry"
+  method="POST"
+  action="/thank-you/"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-enquiry-form
+  data-astro-reload
+  class="grid gap-5 md:grid-cols-2"
+>
+  {heading && <h2 class="font-serif text-3xl md:col-span-2 md:text-4xl">{heading}</h2>}
+  <input type="hidden" name="form-name" value="enquiry" />
+  <p class="hidden">
+    <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div>
+    <label for={id('name')} class="field-label">Full name</label>
+    <input id={id('name')} name="name" type="text" autocomplete="name" required class="field" />
+  </div>
+  <div>
+    <label for={id('email')} class="field-label">Email</label>
+    <input id={id('email')} name="email" type="email" autocomplete="email" required class="field" />
+  </div>
+  <div>
+    <label for={id('phone')} class="field-label">Phone <span class="font-normal normal-case tracking-normal">(optional)</span></label>
+    <input id={id('phone')} name="phone" type="tel" autocomplete="tel" class="field" />
+  </div>
+  <div>
+    <label for={id('country')} class="field-label">Country</label>
+    <input id={id('country')} name="country" type="text" autocomplete="country-name" required class="field" />
+  </div>
+  <div class="md:col-span-2">
+    <label for={id('villa')} class="field-label">Villa of interest</label>
+    <select id={id('villa')} name="villa" class="field field-select" data-villa-select>
+      <option value="Not sure yet">Not sure yet — show me everything</option>
+      {
+        villas.map((v) => (
+          <option value={v.data.name} data-slug={v.id} selected={v.data.name === villaName} disabled={v.data.status === 'Sold'}>
+            {v.data.name} · {v.data.bedrooms} bed{v.data.status !== 'Available' ? ` (${v.data.status})` : ''}
+          </option>
+        ))
+      }
+    </select>
+  </div>
+  <div class="md:col-span-2">
+    <label for={id('message')} class="field-label">Message</label>
+    <textarea
+      id={id('message')}
+      name="message"
+      rows={compact ? 4 : 6}
+      class="field resize-y"
+      placeholder="Tell us a little about what you're looking for, and when you'd like to visit."></textarea>
+  </div>
+
+  <div class="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-center md:justify-between">
+    <p class="text-sm text-driftwood-dark">We'll reply within one business day. Your details stay private.</p>
+    <button type="submit" class="btn btn-primary w-full md:w-auto">Send enquiry</button>
+  </div>
+  <p data-form-status role="status" aria-live="polite" class="text-sm text-[#8a3b2e] md:col-span-2 empty:hidden"></p>
+</form>

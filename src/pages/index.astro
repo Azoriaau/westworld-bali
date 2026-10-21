@@ -1,0 +1,169 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import VillaCard from '../components/VillaCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getVillas } from '../lib/format';
+import { site } from '../site.config';
+import hero from '../assets/images/home/hero.jpg';
+import intro from '../assets/images/home/intro.jpg';
+import lifestyle from '../assets/images/home/lifestyle.jpg';
+import beach from '../assets/images/location/seminyak-beach.jpg';
+
+const villas = await getVillas();
+const featured = villas.filter((v) => v.data.featured).slice(0, 3);
+const available = villas.filter((v) => v.data.status === 'Available').length;
+
+const highlights = [
+  { value: `${villas.length}`, label: 'Private villas' },
+  { value: '5 min', label: 'Walk to the beach' },
+  { value: '30 min', label: 'From the airport' },
+];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="relative isolate flex min-h-svh items-end overflow-hidden bg-sand">
+    {
+      site.heroVideo ? (
+        <video
+          class="absolute inset-0 -z-10 size-full object-cover motion-reduce:hidden"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster={hero.src}
+          aria-hidden="true"
+        >
+          <source src={site.heroVideo} type="video/mp4" />
+        </video>
+      ) : null
+    }
+    <Image
+      src={hero}
+      alt="Morning light over the ocean at Seminyak beach"
+      widths={[640, 960, 1280, 1600, 2000, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class:list={['absolute inset-0 -z-20 size-full object-cover', site.heroVideo && 'motion-safe:hidden']}
+    />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ocean-dark/65 via-ocean-dark/15 to-transparent"></div>
+
+    <div class="container-site pt-32 pb-16 text-linen md:pb-24">
+      <p class="rise text-xs font-semibold tracking-[0.3em] uppercase">Seminyak · Bali</p>
+      <h1 class="rise mt-5 max-w-4xl text-5xl leading-[1.02] sm:text-6xl md:text-8xl">{site.tagline}</h1>
+      <div class="rise rise-2 mt-10 flex flex-col gap-3 sm:flex-row">
+        <a href="/villas/" class="btn btn-light">Explore the villas</a>
+        <a href="/contact/" class="btn border-linen/70 text-linen hover:bg-linen hover:text-ocean">Enquire</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="py-24 md:py-36">
+    <div class="container-site grid items-center gap-12 md:grid-cols-12 md:gap-16">
+      <div class="md:col-span-6 lg:col-span-5" data-reveal>
+        <p class="eyebrow">The development</p>
+        <h2 class="mt-4 text-4xl md:text-6xl">A small collection, made to be lived in</h2>
+        <div class="mt-8 space-y-5 text-lg text-driftwood-dark">
+          <p>
+            {site.name} is an intimate enclave of {villas.length} private villas, tucked down a quiet lane in the heart of
+            Seminyak. Each home is built from timber, stone and linen, with the kind of light and space that makes you
+            slow down the moment you arrive.
+          </p>
+          <p>
+            Designed for owners who want a true Bali home, and investors seeking a proven rental location, every villa
+            comes with the option of full rental management.
+          </p>
+        </div>
+        <a href="/about/" class="btn btn-outline mt-10">Our story</a>
+      </div>
+      <div class="md:col-span-6 lg:col-span-6 lg:col-start-7" data-reveal style="--reveal-delay: .15s">
+        <Image
+          src={intro}
+          alt="Sunlit living pavilion with linen sofa and timber shutters"
+          widths={[480, 720, 960, 1200]}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          class="aspect-[4/5] w-full rounded-soft object-cover"
+        />
+      </div>
+    </div>
+
+    <dl class="container-site mt-20 grid grid-cols-3 gap-4 border-y border-sand py-10 text-center md:mt-28" data-reveal>
+      {
+        highlights.map((h) => (
+          <div class="flex flex-col">
+            <dt class="order-2 mt-2 text-xs tracking-[0.18em] text-driftwood-dark uppercase md:text-sm">{h.label}</dt>
+            <dd class="order-1 font-serif text-4xl md:text-6xl">{h.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- Featured villas -->
+  <section class="bg-sand-light py-24 md:py-32">
+    <div class="container-site">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between" data-reveal>
+        <div>
+          <p class="eyebrow">The villas</p>
+          <h2 class="mt-4 text-4xl md:text-6xl">Three homes, one quiet lane</h2>
+        </div>
+        <p class="max-w-sm text-driftwood-dark">
+          {available} of {villas.length} villas currently available. Two to four bedrooms, each with its own pool.
+        </p>
+      </div>
+      <div class="mt-14 grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          featured.map((villa, i) => (
+            <div data-reveal style={`--reveal-delay: ${i * 0.12}s`}>
+              <VillaCard villa={villa} />
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-16 text-center" data-reveal>
+        <a href="/villas/" class="btn btn-outline">View all villas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-bleed lifestyle image -->
+  <section aria-label="Lifestyle" data-reveal>
+    <Image
+      src={lifestyle}
+      alt="Pool deck bathed in soft afternoon light"
+      widths={[640, 960, 1280, 1600]}
+      sizes="100vw"
+      class="h-[60svh] w-full object-cover md:h-[80svh]"
+    />
+  </section>
+
+  <!-- Location teaser -->
+  <section class="py-24 md:py-36">
+    <div class="container-site grid items-center gap-12 md:grid-cols-2 md:gap-20">
+      <div class="order-2 md:order-1" data-reveal>
+        <Image
+          src={beach}
+          alt="Sunset over Seminyak beach with a palm silhouette"
+          widths={[480, 720, 960, 1200]}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          class="aspect-[4/3] w-full rounded-soft object-cover"
+        />
+      </div>
+      <div class="order-1 md:order-2" data-reveal style="--reveal-delay: .12s">
+        <p class="eyebrow">Location</p>
+        <h2 class="mt-4 text-4xl md:text-6xl">Barefoot to the beach</h2>
+        <p class="mt-6 text-lg text-driftwood-dark">
+          Seminyak is Bali's most loved coastal village: long sunsets on Petitenget beach, world-class dining, boutique
+          shopping and beach clubs, all within an easy stroll. Ngurah Rai International Airport is around 30 minutes away.
+        </p>
+        <a href="/location/" class="btn btn-outline mt-10">Discover Seminyak</a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import StatusBadge from './StatusBadge.astro';
+import { formatArea, formatPrice, plural, type Villa } from '../lib/format';
+
+interface Props {
+  villa: Villa;
+  /** Load eagerly when the card is likely above the fold */
+  eager?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { villa, eager = false, headingLevel: Heading = 'h3' } = Astro.props;
+const { data } = villa;
+const href = `/villas/${villa.id}/`;
+---
+
+<article class="group relative flex flex-col">
+  <div class="relative overflow-hidden rounded-soft bg-sand">
+    <Image
+      src={data.heroImage}
+      alt={data.heroAlt}
+      widths={[480, 720, 960, 1200]}
+      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+      loading={eager ? 'eager' : 'lazy'}
+      class="aspect-[4/3] w-full object-cover transition-transform duration-[1.2s] ease-soft group-hover:scale-[1.03]"
+      transition:name={`villa-image-${villa.id}`}
+    />
+    <StatusBadge status={data.status} class="absolute top-4 left-4" />
+  </div>
+
+  <div class="flex flex-1 flex-col pt-6">
+    <Heading class="font-serif text-3xl">
+      <a href={href} class="after:absolute after:inset-0 after:content-['']">{data.name}</a>
+    </Heading>
+    <p class="mt-2 text-driftwood-dark">{data.tagline}</p>
+
+    <dl class="mt-5 grid grid-cols-3 gap-4 border-t border-sand pt-5 text-sm">
+      <div>
+        <dt class="text-xs tracking-[0.14em] text-driftwood-dark uppercase">Bedrooms</dt>
+        <dd class="mt-1 font-medium">{plural(data.bedrooms, 'bed')}</dd>
+      </div>
+      <div>
+        <dt class="text-xs tracking-[0.14em] text-driftwood-dark uppercase">Land</dt>
+        <dd class="mt-1 font-medium">{formatArea(data.landSize)}</dd>
+      </div>
+      <div>
+        <dt class="text-xs tracking-[0.14em] text-driftwood-dark uppercase">From</dt>
+        <dd class="mt-1 font-medium">{data.status === 'Sold' ? 'Sold' : formatPrice(data.priceFrom)}</dd>
+      </div>
+    </dl>
+
+    <span class="mt-6 inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase" aria-hidden="true">
+      View villa
+      <svg viewBox="0 0 24 24" class="size-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="1.5"
+        ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+      >
+    </span>
+  </div>
+</article>

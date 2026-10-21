@@ -1,0 +1,77 @@
+---
+// Place once per page that has [data-lightbox] links. Behaviour lives in src/scripts/lightbox.ts.
+---
+
+<dialog
+  data-lightbox-dialog
+  aria-label="Image viewer"
+  class="lightbox m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 text-linen"
+>
+  <figure class="relative flex h-full flex-col items-center justify-center gap-4 px-4 pt-16 pb-6 md:px-20">
+    <img data-lightbox-image alt="" class="max-h-[78vh] w-auto max-w-full rounded-soft object-contain" />
+    <figcaption class="flex w-full max-w-4xl items-baseline justify-between gap-6 text-sm text-linen/85">
+      <span data-lightbox-caption></span>
+      <span data-lightbox-counter class="shrink-0 tabular-nums"></span>
+    </figcaption>
+  </figure>
+
+  <button type="button" data-lightbox-close class="lightbox-btn top-4 right-4" aria-label="Close image viewer">
+    <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+      ><path d="M6 6l12 12M18 6L6 18"></path></svg
+    >
+  </button>
+  <button type="button" data-lightbox-prev class="lightbox-btn top-1/2 left-2 -translate-y-1/2 md:left-6" aria-label="Previous image">
+    <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+      ><path d="M15 5l-7 7 7 7"></path></svg
+    >
+  </button>
+  <button type="button" data-lightbox-next class="lightbox-btn top-1/2 right-2 -translate-y-1/2 md:right-6" aria-label="Next image">
+    <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+      ><path d="M9 5l7 7-7 7"></path></svg
+    >
+  </button>
+</dialog>
+
+<style>
+  .lightbox::backdrop {
+    background: rgb(34 59 59 / 0.94);
+  }
+  .lightbox-btn {
+    position: absolute;
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgb(250 247 242 / 0.1);
+    color: var(--color-linen);
+    transition: background-color 0.25s;
+  }
+  .lightbox-btn:hover {
+    background: rgb(250 247 242 / 0.22);
+  }
+  .lightbox-btn[hidden] {
+    display: none;
+  }
+  .lightbox-btn:focus-visible {
+    outline-color: var(--color-linen);
+  }
+  [data-lightbox-image] {
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+  }
+  [data-lightbox-image]:global(.is-loaded) {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox[open] {
+      animation: lightbox-in 0.3s ease-out;
+    }
+  }
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+</style>
